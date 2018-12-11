@@ -24,10 +24,19 @@ sigma = 0.3;
 %
 
 
-
-
-
-
+trials = [0.01 0.03 0.1 0.3 1 3 10 30];
+error=0;
+for c=trials
+    for sig=trials
+        model = svmTrain(X,y,c,@(x1,x2) gaussianKernel(x1,x2,sig));
+        predictions = svmPredict(model,Xval);
+        if( error < mean(double(predictions == yval)) )
+            error = mean(double(predictions == yval));
+            C = c;
+            sigma=sig;
+        end;
+    end;
+end;
 
 % =========================================================================
 
